@@ -87,6 +87,12 @@ exports.run = async function (client, message, args, noMsg) {
 function likeSearch(client, raid, item) {
     let promise = new Promise((resolve, reject) => {
         client.models.reserveItem.findAll({where: { name: {[Op.like]: '%' + item + '%'}, raid: raid.raid}}).then((items) => {
+            
+            if ((items[0].itemID.length > 1)&&(!raid.genericTierReserve)){
+                console.log(items + " - " + raid.genericTierReserve);
+                resolve(false);
+            }
+
             resolve(items);
         });
     });
@@ -114,6 +120,9 @@ function signupReserve(client, signupID, raid, item) {
                     reserveItemID: reserveItem.id,
                     signupID: signupID
                 };
+                
+                // Check if the item is a set item and the Generic Tier Reserve is not available
+                if ((reserveItem.itemID.length > 1)&&(!raid.genericTierReserve)) resolve(false);
 
                 // Check if the player already has an existing reserve
                 client.models.raidReserve.findOne({ where: { signupID: signupID, raidID: raid.id } }).then((raidReserve) => {

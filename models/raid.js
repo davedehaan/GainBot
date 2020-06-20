@@ -43,7 +43,13 @@ module.exports = (client, Sequelize) => {
         },
         softreserve: {
             type: Sequelize.BOOLEAN,
-            allowNull: true
+            allowNull: true,
+            defaultValue: false
+        },
+        genericTierReserve: {
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
         },
         locked: {
             type: Sequelize.BOOLEAN,
